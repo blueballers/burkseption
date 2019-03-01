@@ -14,11 +14,15 @@ import { environment } from 'src/environments/environment';
 import { MaterialModule } from './material-module/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
+import { BurxListComponent } from './burx-list/burx-list.component';
+import { GoogleMapsComponent } from './google-maps/google-maps.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    BurxListComponent,
+    GoogleMapsComponent
   ],
   imports: [
     BrowserModule,
