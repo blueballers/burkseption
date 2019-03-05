@@ -8,20 +8,12 @@
 <mat-sidenav-container class="example-sidenav-container">
 	<mat-sidenav #snav mode="over" fixedTopGap="56">
 		<mat-nav-list>
-			<a mat-list-item routerLink=".">one item</a>
-			<a mat-list-item routerLink=".">2 item</a>
+			<a mat-list-item routerLink="/">HOME</a>
+			<a mat-list-item routerLink="addreview">Add Review</a>
 		</mat-nav-list>
 	</mat-sidenav>
 
 	<mat-sidenav-content>
-
-	<h1>BURXI GURUD</h1>
-
-	<burx-google-maps></burx-google-maps>
-
-	<app-burx-list></app-burx-list>
-
-	<router-outlet></router-outlet>
-
+		<router-outlet></router-outlet>
 	</mat-sidenav-content>
 </mat-sidenav-container>
