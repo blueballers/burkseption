@@ -19,51 +19,50 @@ export class AddReviewComponent implements OnInit {
 	selectedFile: File;
 	burger: Burger = {
 		name: "new",
-		address: "burger"
+		address: "burger",
+		imageUrl: "https://imgplaceholder.com/420x320/ff7f7f/333333/fa-image"
 	};
 	profileForm = new FormGroup({
 		oneWordReview: new FormControl("")
 	});
 
-	constructor(
-		private httpClient: HttpClient,
-		private cd: ChangeDetectorRef
-	) {}
+	constructor(private httpClient: HttpClient) {}
 
 	ngOnInit() {
-		this.profileForm.valueChanges.pipe(
-			tap(formValue => this.burger = {
-				...this.burger,
-				name: formValue.oneWordReview
-			})
-		).subscribe();
+		this.profileForm.valueChanges
+			.pipe(
+				tap(
+					formValue =>
+						(this.burger = {
+							...this.burger,
+							name: formValue.oneWordReview
+						})
+				)
+			)
+			.subscribe();
 	}
 
 	onFileSelected(event) {
-		console.log(event);
-		this.selectedFile = event.target.files[0] as File;
-
-		var reader = new FileReader();
-		reader.onload = (function(theFile) {
-			return function(e) {
+		if (event.target.files && event.target.files[0]) {
+			let reader = new FileReader();
+			// read file as data url
+			reader.readAsDataURL(event.target.files[0]);
+			reader.onload = (event: any) => {
+				// called once readAsDataURL is completed
 				this.burger = {
 					...this.burger,
-					name: theFile.name,
-					imageUrl: e.target.result
+					imageUrl: event.target.result
 				};
-				console.log(this.burger);
 			};
-		})(this.selectedFile);
-
-		reader.readAsDataURL(this.selectedFile);
-		this.cd.markForCheck();
+		}
 	}
 
 	onUpload() {
-		const formData = new FormData();
-		formData.append("image", this.selectedFile, this.selectedFile.name);
-		this.httpClient
-			.post("", formData)
-			.subscribe(response => console.log(response));
+		console.info("NOT IMPLEMENTED");
+		// const formData = new FormData();
+		// formData.append("image", this.selectedFile, this.selectedFile.name);
+		// this.httpClient
+		// 	.post("", formData)
+		// 	.subscribe(response => console.log(response));
 	}
 }

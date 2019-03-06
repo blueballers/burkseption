@@ -10,18 +10,18 @@
 		/>
 	</mat-form-field>
 </form>
+<!-- Hidden element to be triggered for a nicer button -->
 <input
 	(change)="onFileSelected($event)"
 	type="file"
 	style="display: none"
 	#fileInput
 />
-<button (click)="fileInput.click()">Pick File</button>
-<button (click)="onUpload()">Upload!</button>
+<button mat-raised-button (click)="fileInput.click()">Pick File</button>
+<button mat-raised-button (click)="onUpload()">Upload!</button>
 <h2>Arvustuse eelvaade</h2>
 <burx-burx-card [burger]="burger"></burx-burx-card>
 
+
 <hr />
 {{ profileForm.value | json }}
-<hr />
-<hr />
