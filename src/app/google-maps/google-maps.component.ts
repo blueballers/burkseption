@@ -3,6 +3,7 @@ import { MapsService } from "./google-maps.service";
 import { tap } from "rxjs/operators";
 
 @Component({
+	// tslint:disable-next-line:component-selector
 	selector: "burx-google-maps",
 	templateUrl: "./google-maps.component.html",
 	styleUrls: ["./google-maps.component.scss"]
@@ -14,7 +15,7 @@ export class GoogleMapsComponent implements OnInit {
 	currentLong: any;
 	marker: google.maps.Marker;
 
-	constructor(private mapService: MapsService) {}
+	constructor(private mapService: MapsService) { }
 
 	ngOnInit() {
 		const mapProp = {

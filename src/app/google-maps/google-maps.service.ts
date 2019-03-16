@@ -7,7 +7,7 @@ import { Subject } from "rxjs";
 export class MapsService {
 	markers$ = new Subject<google.maps.Marker>();
 
-	constructor() {}
+	constructor() { }
 
 	addMarker(marker: google.maps.Marker) {
 		console.log(marker);
