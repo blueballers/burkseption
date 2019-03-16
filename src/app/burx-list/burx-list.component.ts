@@ -19,5 +19,5 @@ export class BurxListComponent implements OnInit {
 		this.burgers = db.collection<Burger>("items").valueChanges();
 	}
 
-	ngOnInit() {}
+	ngOnInit() { }
 }

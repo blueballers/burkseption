@@ -1,4 +1,10 @@
+@import "../../assets/variables.scss";
+
 app-burx-list {
 	display: block;
-	padding: 1rem;
+	padding: $padding;
+}
+
+burx-burx-card {
+	padding: $padding;
 }

@@ -1,5 +1,5 @@
 export interface Burger {
-    name: string;
-    address: string;
-    imageUrl?: string;
+	name: string;
+	address: string;
+	imageUrl?: string;
 }
