@@ -1,12 +1,16 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
 import { MapsService } from "./google-maps.service";
 import { tap } from "rxjs/operators";
+import { Burger } from "../burger/burger.model";
+
+// FIREBASE
+import { AngularFirestore } from "@angular/fire/firestore";
 
 @Component({
-	// tslint:disable-next-line:component-selector
 	selector: "burx-google-maps",
 	templateUrl: "./google-maps.component.html",
-	styleUrls: ["./google-maps.component.scss"]
+	styleUrls: ["./google-maps.component.scss"],
+	encapsulation: ViewEncapsulation.None
 })
 export class GoogleMapsComponent implements OnInit {
 	@ViewChild("gmap") gmapElement: any;
@@ -14,8 +18,17 @@ export class GoogleMapsComponent implements OnInit {
 	currentLat: any;
 	currentLong: any;
 	marker: google.maps.Marker;
+	burgersFilteredByDistance: any;
+	burgers: Burger[];
 
-	constructor(private mapService: MapsService) { }
+	constructor(private mapService: MapsService, db: AngularFirestore) {
+		db.collection<Burger>("items")
+			.valueChanges()
+			.subscribe(burgers => {
+				console.log(burgers);
+				this.burgers = burgers;
+			});
+	}
 
 	ngOnInit() {
 		const mapProp = {
@@ -40,10 +53,73 @@ export class GoogleMapsComponent implements OnInit {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(position => {
 				this.showPosition(position);
+
+				this.burgersFilteredByDistance = this.applyHaversine(
+					this.burgers.map(burger => ({
+						title: burger.name,
+						latitude: burger.lat,
+						longitude: burger.long
+					})),
+					position
+				);
+
+				this.burgersFilteredByDistance.sort((locationA, locationB) => {
+					return locationA.distance - locationB.distance;
+				});
 			});
 		} else {
 			alert("Geolocation is not supported by this browser.");
 		}
+	}
+	// {
+	// 	"title": "Tribeca Grill",
+	// 	"latitude": 40.719518,
+	// 	"longitude": -74.009807
+	// }
+	applyHaversine(locations, userLoc: Position) {
+		let usersLocation = {
+			lat: userLoc.coords.latitude,
+			lng: userLoc.coords.longitude
+		};
+
+		locations.map(location => {
+			let placeLocation = {
+				lat: location.latitude,
+				lng: location.longitude
+			};
+
+			location.distance = this.getDistanceBetweenPoints(
+				usersLocation,
+				placeLocation
+			).toFixed(2);
+		});
+
+		return locations;
+	}
+
+	getDistanceBetweenPoints(start, end) {
+		let R = 6371; // earthRadius in KM
+		let lat1 = start.lat;
+		let lon1 = start.lng;
+		let lat2 = end.lat;
+		let lon2 = end.lng;
+
+		let dLat = this.toRad(lat2 - lat1);
+		let dLon = this.toRad(lon2 - lon1);
+		let a =
+			Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+			Math.cos(this.toRad(lat1)) *
+				Math.cos(this.toRad(lat2)) *
+				Math.sin(dLon / 2) *
+				Math.sin(dLon / 2);
+		let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		let d = R * c;
+
+		return d;
+	}
+
+	toRad(x) {
+		return (x * Math.PI) / 180;
 	}
 
 	private showPosition(position) {
