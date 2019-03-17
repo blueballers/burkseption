@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output } from "@angular/core";
 import { Burger } from "../burger/burger.model";
 import { MapsService } from "../google-maps/google-maps.service";
 
@@ -17,9 +17,11 @@ export class BurxCardComponent implements OnInit {
 	showOnMap(item: Burger) {
 		this.mapSerivce.addMarker(
 			new google.maps.Marker({
-				position: new google.maps.LatLng(-25.363882, 131.044922),
+				position: new google.maps.LatLng(item.lat, item.long),
 				title: "Hello World!"
 			})
 		);
+
+		document.getElementById("burx-google-map").scrollIntoView();
 	}
 }
