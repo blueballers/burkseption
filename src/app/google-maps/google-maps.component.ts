@@ -2,9 +2,7 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
 import { MapsService } from "./google-maps.service";
 import { tap } from "rxjs/operators";
 import { Burger } from "../burger/burger.model";
-
-// FIREBASE
-import { AngularFirestore } from "@angular/fire/firestore";
+import { BurgerService } from "../burger/burger.service";
 
 export interface GLocation {
 	title: string;
@@ -29,13 +27,13 @@ export class GoogleMapsComponent implements OnInit {
 	burgers: Burger[];
 	directionsWithWazeUrl: string;
 
-	constructor(private mapService: MapsService, db: AngularFirestore) {
-		db.collection<Burger>("items")
-			.valueChanges()
-			.subscribe(burgers => {
-				console.log(burgers);
-				this.burgers = burgers;
-			});
+	constructor(
+		private mapService: MapsService,
+		burgerService: BurgerService
+	) {
+		burgerService.burgers$.subscribe(burgers => {
+			this.burgers = burgers;
+		});
 	}
 
 	ngOnInit() {
@@ -49,7 +47,6 @@ export class GoogleMapsComponent implements OnInit {
 		this.mapService.markers$
 			.pipe(
 				tap(marker => {
-					console.log("IM HERE");
 					marker.setMap(this.map);
 					this.map.panTo(marker.getPosition());
 				})

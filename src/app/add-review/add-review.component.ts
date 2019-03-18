@@ -1,8 +1,7 @@
 import {
 	Component,
 	OnInit,
-	ViewEncapsulation,
-	ChangeDetectorRef
+	ViewEncapsulation
 } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { FormGroup, FormControl } from "@angular/forms";
@@ -44,7 +43,7 @@ export class AddReviewComponent implements OnInit {
 
 	onFileSelected(event) {
 		if (event.target.files && event.target.files[0]) {
-			let reader = new FileReader();
+			const reader = new FileReader();
 			// read file as data url
 			reader.readAsDataURL(event.target.files[0]);
 			reader.onload = (event: any) => {
@@ -58,7 +57,7 @@ export class AddReviewComponent implements OnInit {
 	}
 
 	onUpload() {
-		console.info("NOT IMPLEMENTED");
+		console.log("NOT IMPLEMENTED");
 		// const formData = new FormData();
 		// formData.append("image", this.selectedFile, this.selectedFile.name);
 		// this.httpClient
