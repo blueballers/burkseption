@@ -1,5 +1,6 @@
 <button mat-raised-button (click)="findMe()">Find me and my closest burger!</button>
 <h2 *ngIf="burgersFilteredByDistance">Your closest burger is {{ burgersFilteredByDistance[0].distance }} KM!</h2>
+<a *ngIf="directionsWithWazeUrl" href="{{ directionsWithWazeUrl }}">OPEN DIR IN WAZE</a>
 
 <div id="burx-google-map" #gmap style="width:100%;height:300px"></div>
 

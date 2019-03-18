@@ -6,6 +6,13 @@ import { Burger } from "../burger/burger.model";
 // FIREBASE
 import { AngularFirestore } from "@angular/fire/firestore";
 
+export interface GLocation {
+	title: string;
+	latitude: number;
+	longitude: number;
+	distance?: number;
+}
+
 @Component({
 	selector: "burx-google-maps",
 	templateUrl: "./google-maps.component.html",
@@ -18,8 +25,9 @@ export class GoogleMapsComponent implements OnInit {
 	currentLat: any;
 	currentLong: any;
 	marker: google.maps.Marker;
-	burgersFilteredByDistance: any;
+	burgersFilteredByDistance: GLocation[];
 	burgers: Burger[];
+	directionsWithWazeUrl: string;
 
 	constructor(private mapService: MapsService, db: AngularFirestore) {
 		db.collection<Burger>("items")
@@ -66,16 +74,19 @@ export class GoogleMapsComponent implements OnInit {
 				this.burgersFilteredByDistance.sort((locationA, locationB) => {
 					return locationA.distance - locationB.distance;
 				});
+
+				// https://developers.google.com/waze/deeplinks/
+				this.directionsWithWazeUrl = `https://www.waze.com/ul?ll=${
+					this.burgersFilteredByDistance[0].latitude
+				},${
+					this.burgersFilteredByDistance[0].longitude
+				}&navigate=yes&zoom=17`;
 			});
 		} else {
 			alert("Geolocation is not supported by this browser.");
 		}
 	}
-	// {
-	// 	"title": "Tribeca Grill",
-	// 	"latitude": 40.719518,
-	// 	"longitude": -74.009807
-	// }
+
 	applyHaversine(locations, userLoc: Position) {
 		let usersLocation = {
 			lat: userLoc.coords.latitude,
