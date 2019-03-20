@@ -14,6 +14,7 @@ import { environment } from "src/environments/environment";
 import { MaterialModule } from "./material-module/material.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HomeComponent } from "./home/home.component";
+import { SideNavigationContainer } from "./navigation/side-navigation/side-navigation.container";
 import { BurxListComponent } from "./burx-list/burx-list.component";
 import { GoogleMapsComponent } from "./google-maps/google-maps.component";
 import { AddReviewComponent } from "./add-review/add-review.component";
@@ -28,7 +29,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 		BurxListComponent,
 		GoogleMapsComponent,
 		AddReviewComponent,
-		BurxCardComponent
+		BurxCardComponent,
+		SideNavigationContainer
 	],
 	imports: [
 		BrowserModule,
@@ -43,4 +45,4 @@ import { ReactiveFormsModule } from "@angular/forms";
 	providers: [],
 	bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

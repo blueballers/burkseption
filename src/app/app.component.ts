@@ -1,12 +1,20 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Subject } from "rxjs";
 
 @Component({
 	selector: "app-root",
 	templateUrl: "./app.component.html",
 	styleUrls: ["./app.component.scss"]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 	title = "burkseption";
 
-	ngOnInit() {}
+	private toggleSubject: Subject<boolean> = new Subject<boolean>();
+	constructor() { }
+
+	ngOnInit() { }
+
+	openSideNavigation() {
+		this.toggleSubject.next(true);
+	}
 }
