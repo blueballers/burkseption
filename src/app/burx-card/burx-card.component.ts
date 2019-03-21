@@ -15,13 +15,14 @@ export class BurxCardComponent implements OnInit {
 	ngOnInit() {}
 
 	showOnMap(item: Burger) {
+		document.getElementById("burx-google-map").scrollIntoView();
+
 		this.mapSerivce.addMarker(
 			new google.maps.Marker({
-				position: new google.maps.LatLng(item.lat, item.long),
-				title: "Hello World!"
+				position: { lat: item.lat, lng: item.lng },
+				title: item.name,
+				animation: google.maps.Animation.DROP
 			})
 		);
-
-		document.getElementById("burx-google-map").scrollIntoView();
 	}
 }

@@ -1,5 +1,5 @@
 export interface Burger {
-	long?: number;
+	lng?: number;
 	lat?: number;
 	name: string;
 	address: string;
