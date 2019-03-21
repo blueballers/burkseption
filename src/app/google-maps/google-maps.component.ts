@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from "@angular/core";
 import { MapsService } from "./google-maps.service";
-import { tap } from "rxjs/operators";
+import { tap, map } from "rxjs/operators";
 import { Burger } from "../burger/burger.model";
 import { BurgerService } from "../burger/burger.service";
+import { Subscription, merge } from "rxjs";
 
 export interface GLocation {
 	title: string;
@@ -17,23 +18,22 @@ export interface GLocation {
 	styleUrls: ["./google-maps.component.scss"],
 	encapsulation: ViewEncapsulation.None
 })
-export class GoogleMapsComponent implements OnInit {
+export class GoogleMapsComponent implements OnInit, OnDestroy {
 	@ViewChild("gmap") gmapElement: any;
 	map: google.maps.Map;
 	currentLat: any;
 	currentLong: any;
 	marker: google.maps.Marker;
 	burgersFilteredByDistance: GLocation[];
-	burgers: Burger[];
 	directionsWithWazeUrl: string;
+
+	private burgers: Burger[];
+	private data$$: Subscription;
 
 	constructor(
 		private mapService: MapsService,
-		burgerService: BurgerService
+		private burgerService: BurgerService
 	) {
-		burgerService.burgers$.subscribe(burgers => {
-			this.burgers = burgers;
-		});
 	}
 
 	ngOnInit() {
@@ -44,14 +44,25 @@ export class GoogleMapsComponent implements OnInit {
 		};
 		this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
 
-		this.mapService.markers$
+		const burgers$ = this.burgerService.getBurgers().pipe(map(burgers => this.burgers = burgers));
+		const markers$ = this.mapService.markers$
 			.pipe(
 				tap(marker => {
 					marker.setMap(this.map);
 					this.map.panTo(marker.getPosition());
 				})
-			)
-			.subscribe();
+			);
+
+		this.data$$ = merge(
+			markers$,
+			burgers$
+		).subscribe();
+	}
+
+	ngOnDestroy() {
+		if (this.data$$) {
+			this.data$$.unsubscribe();
+		}
 	}
 
 	findMe() {
@@ -75,9 +86,9 @@ export class GoogleMapsComponent implements OnInit {
 				// https://developers.google.com/waze/deeplinks/
 				this.directionsWithWazeUrl = `https://www.waze.com/ul?ll=${
 					this.burgersFilteredByDistance[0].latitude
-				},${
+					},${
 					this.burgersFilteredByDistance[0].longitude
-				}&navigate=yes&zoom=17`;
+					}&navigate=yes&zoom=17`;
 			});
 		} else {
 			alert("Geolocation is not supported by this browser.");
@@ -85,13 +96,13 @@ export class GoogleMapsComponent implements OnInit {
 	}
 
 	applyHaversine(locations, userLoc: Position) {
-		let usersLocation = {
+		const usersLocation = {
 			lat: userLoc.coords.latitude,
 			lng: userLoc.coords.longitude
 		};
 
 		locations.map(location => {
-			let placeLocation = {
+			const placeLocation = {
 				lat: location.latitude,
 				lng: location.longitude
 			};
@@ -106,22 +117,22 @@ export class GoogleMapsComponent implements OnInit {
 	}
 
 	getDistanceBetweenPoints(start, end) {
-		let R = 6371; // earthRadius in KM
-		let lat1 = start.lat;
-		let lon1 = start.lng;
-		let lat2 = end.lat;
-		let lon2 = end.lng;
+		const R = 6371; // earthRadius in KM
+		const lat1 = start.lat;
+		const lon1 = start.lng;
+		const lat2 = end.lat;
+		const lon2 = end.lng;
 
-		let dLat = this.toRad(lat2 - lat1);
-		let dLon = this.toRad(lon2 - lon1);
-		let a =
+		const dLat = this.toRad(lat2 - lat1);
+		const dLon = this.toRad(lon2 - lon1);
+		const a =
 			Math.sin(dLat / 2) * Math.sin(dLat / 2) +
 			Math.cos(this.toRad(lat1)) *
-				Math.cos(this.toRad(lat2)) *
-				Math.sin(dLon / 2) *
-				Math.sin(dLon / 2);
-		let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		let d = R * c;
+			Math.cos(this.toRad(lat2)) *
+			Math.sin(dLon / 2) *
+			Math.sin(dLon / 2);
+		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		const d = R * c;
 
 		return d;
 	}

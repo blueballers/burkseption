@@ -7,10 +7,13 @@ import { Observable } from "rxjs";
 	providedIn: "root"
 })
 export class BurgerService {
-	burgers$: Observable<Burger[]>;
+	private burgers$: Observable<Burger[]>;
 
 	constructor(private db: AngularFirestore) {
-    console.log("BURER SERVICE INIT")
-		this.burgers$ = db.collection<Burger>("items").valueChanges();
+		this.burgers$ = this.db.collection<Burger>("items").valueChanges();
+	}
+
+	getBurgers() {
+		return this.burgers$;
 	}
 }

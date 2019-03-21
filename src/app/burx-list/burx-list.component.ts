@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/firestore";
 import { Burger } from "../burger/burger.model";
 import { BurgerService } from "../burger/burger.service";
+import { Observable } from "rxjs";
 
 @Component({
 	selector: "app-burx-list",
@@ -10,14 +10,12 @@ import { BurgerService } from "../burger/burger.service";
 	encapsulation: ViewEncapsulation.None
 })
 export class BurxListComponent implements OnInit {
-	burgers: Burger[];
+	burgers$: Observable<Burger[]>;
 
-	constructor(db: AngularFirestore, burgerService: BurgerService) {
-		burgerService.burgers$.subscribe(burgers => {
-			console.log(burgers);
-			this.burgers = burgers;
-		});
+	constructor(private burgerService: BurgerService) {
 	}
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.burgers$ = this.burgerService.getBurgers();
+	}
 }
