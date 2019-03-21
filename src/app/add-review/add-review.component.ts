@@ -3,7 +3,6 @@ import {
 	OnInit,
 	ViewEncapsulation
 } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Burger } from "../burger/burger.model";
 import { tap } from "rxjs/operators";
@@ -25,7 +24,7 @@ export class AddReviewComponent implements OnInit {
 		oneWordReview: new FormControl("")
 	});
 
-	constructor(private httpClient: HttpClient) {}
+	constructor() {}
 
 	ngOnInit() {
 		this.profileForm.valueChanges
@@ -46,11 +45,11 @@ export class AddReviewComponent implements OnInit {
 			const reader = new FileReader();
 			// read file as data url
 			reader.readAsDataURL(event.target.files[0]);
-			reader.onload = (event: any) => {
+			reader.onload = (loadEvent: any) => {
 				// called once readAsDataURL is completed
 				this.burger = {
 					...this.burger,
-					imageUrl: event.target.result
+					imageUrl: loadEvent.target.result
 				};
 			};
 		}

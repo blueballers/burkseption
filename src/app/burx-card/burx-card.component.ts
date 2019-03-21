@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { Burger } from "../burger/burger.model";
 import { MapsService } from "../google-maps/google-maps.service";
 
