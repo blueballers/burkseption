@@ -9,7 +9,7 @@ import { Subject } from "rxjs";
 export class AppComponent implements OnInit {
 	title = "burkseption";
 
-	private toggleSubject: Subject<boolean> = new Subject<boolean>();
+	toggleSubject: Subject<boolean> = new Subject<boolean>();
 	constructor() { }
 
 	ngOnInit() { }
