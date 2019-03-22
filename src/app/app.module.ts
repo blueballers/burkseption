@@ -22,6 +22,7 @@ import { AddReviewComponent } from "./add-review/add-review.component";
 import { HttpClientModule } from "@angular/common/http";
 import { BurxCardComponent } from "./burx-card/burx-card.component";
 import { ReactiveFormsModule } from "@angular/forms";
+import { ToolbarContainer } from "./navigation/toolbar/toolbar.container";
 
 @NgModule({
 	declarations: [
@@ -31,7 +32,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 		GoogleMapsComponent,
 		AddReviewComponent,
 		BurxCardComponent,
-		SideNavigationContainer
+		SideNavigationContainer,
+		ToolbarContainer
 	],
 	imports: [
 		BrowserModule,
