@@ -45,19 +45,15 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit() {
-		const mapProp: google.maps.MapOptions = {
+		this.googleMap = new google.maps.Map(this.gmapElement.nativeElement, {
 			center: this.initialMapCenter,
 			zoom: 15,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
-		this.googleMap = new google.maps.Map(
-			this.gmapElement.nativeElement,
-			mapProp
-		);
+		});
 
-		const burgers$ = this.burgerService
-			.getBurgers()
-			.pipe(map(burgers => (this.burgers = burgers)));
+		const burgers$ = this.burgerService.burgers$.pipe(
+			map(burgers => this.burgers = burgers)
+		);
 		const markers$ = this.mapService.markers$.pipe(
 			tap(marker => {
 				marker.setMap(this.googleMap);
@@ -92,7 +88,10 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
 					this.currentPosition
 				);
 
-				this.burgersFilteredByDistance.sort((locationA, locationB) => locationA.distance - locationB.distance);
+				this.burgersFilteredByDistance.sort(
+					(locationA, locationB) =>
+						locationA.distance - locationB.distance
+				);
 
 				// https://developers.google.com/waze/deeplinks/
 				this.directionsWithWazeUrl = `https://www.waze.com/ul?ll=${
@@ -106,7 +105,10 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	private calculateDistancesFromPoint(locations: LocationWithDistance[], userLoc: google.maps.LatLngLiteral) {
+	private calculateDistancesFromPoint(
+		locations: LocationWithDistance[],
+		userLoc: google.maps.LatLngLiteral
+	) {
 		locations.map(location => {
 			const placeLocation = {
 				lat: location.lat,

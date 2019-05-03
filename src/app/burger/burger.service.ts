@@ -1,19 +1,35 @@
 import { Injectable } from "@angular/core";
 import { Burger } from "./burger.model";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { Observable } from "rxjs";
+import { combineLatest, BehaviorSubject } from "rxjs";
+import { map } from "rxjs/operators";
+
+interface BurgerFilter {
+	name: string;
+}
 
 @Injectable({
 	providedIn: "root"
 })
 export class BurgerService {
-	private burgers$: Observable<Burger[]>;
+	initialFilter: BurgerFilter = {
+		name: ""
+	};
 
-	constructor(private db: AngularFirestore) {
-		this.burgers$ = this.db.collection<Burger>("items").valueChanges();
+	burgers$ = this.db.collection<Burger>("items").valueChanges();
+	private currentFilter$ = new BehaviorSubject<BurgerFilter>(
+		this.initialFilter
+	);
+
+	filteredBurgers$ = combineLatest(this.currentFilter$, this.burgers$).pipe(
+		map(([filter, burgers]) =>
+			burgers.filter(burger => burger.name.includes(filter.name))
+		)
+	);
+
+	filterBurgers(filter: BurgerFilter) {
+		this.currentFilter$.next(filter);
 	}
 
-	getBurgers() {
-		return this.burgers$;
-	}
+	constructor(private db: AngularFirestore) {}
 }

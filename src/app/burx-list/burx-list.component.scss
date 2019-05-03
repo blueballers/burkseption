@@ -3,6 +3,10 @@
 app-burx-list {
 	display: block;
 	padding: $padding;
+
+	.example-full-width {
+		width: 100%;
+	}
 }
 
 burx-burx-card {

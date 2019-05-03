@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { Burger } from "../burger/burger.model";
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from "@angular/core";
 import { BurgerService } from "../burger/burger.service";
-import { Observable } from "rxjs";
+import { FormGroup, FormControl } from "@angular/forms";
+import { tap } from "rxjs/operators";
+import { Subscription } from "rxjs";
 
 @Component({
 	selector: "app-burx-list",
@@ -9,13 +10,26 @@ import { Observable } from "rxjs";
 	styleUrls: ["./burx-list.component.scss"],
 	encapsulation: ViewEncapsulation.None
 })
-export class BurxListComponent implements OnInit {
-	burgers$: Observable<Burger[]>;
+export class BurxListComponent implements OnInit, OnDestroy {
+	burgers$ = this.burgerService.filteredBurgers$;
 
-	constructor(private burgerService: BurgerService) {
-	}
+	searchFormGroup = new FormGroup({
+		searchControl: new FormControl("")
+	});
+	data$$: Subscription;
+
+	constructor(private burgerService: BurgerService) {}
 
 	ngOnInit() {
-		this.burgers$ = this.burgerService.getBurgers();
+		this.data$$ = this.searchFormGroup.controls.searchControl.valueChanges.subscribe(
+			searchValue =>
+				this.burgerService.filterBurgers({
+					name: searchValue
+				})
+		);
+	}
+
+	ngOnDestroy() {
+		this.data$$.unsubscribe();
 	}
 }
