@@ -1,14 +1,13 @@
-import { AppPage } from "./app.po";
+import { browser, by, element } from "protractor";
 
 describe("workspace-project App", () => {
-  let page: AppPage;
+	beforeEach(() => {
+		browser.get("/");
+	});
 
-  beforeEach(() => {
-    page = new AppPage();
-  });
-
-  it("should display welcome message", () => {
-    page.navigateTo();
-    expect(page.getTitleText()).toEqual("Welcome to burkseption!");
-  });
+	it("should display welcome message", () => {
+		expect(element(by.css("app-root h1")).getText()).toEqual(
+			"Burkseption"
+		);
+	});
 });

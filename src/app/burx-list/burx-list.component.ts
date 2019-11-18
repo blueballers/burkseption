@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from "@angular/core";
 import { BurgerService } from "../burger/burger.service";
 import { FormGroup, FormControl } from "@angular/forms";
-import { tap } from "rxjs/operators";
 import { Subscription } from "rxjs";
 
 @Component({

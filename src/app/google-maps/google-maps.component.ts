@@ -23,7 +23,7 @@ export interface LocationWithDistance extends google.maps.LatLngLiteral {
 	encapsulation: ViewEncapsulation.None
 })
 export class GoogleMapsComponent implements OnInit, OnDestroy {
-	@ViewChild("gmap") gmapElement: any;
+	@ViewChild("gmap", { static: true }) gmapElement: any;
 
 	initialMapCenter: google.maps.LatLngLiteral = {
 		lat: 59.4336547,

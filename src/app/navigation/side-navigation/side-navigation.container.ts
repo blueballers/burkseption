@@ -10,7 +10,7 @@ import { filter, tap } from "rxjs/operators";
 })
 export class SideNavigationContainer implements OnInit, OnDestroy {
 	@Input() toggle$: Observable<boolean>;
-	@ViewChild("sideNavBar") sideNavBar: MatSidenav;
+	@ViewChild("sideNavBar", { static: true }) sideNavBar: MatSidenav;
 
 	title = "burkseption";
 	data$$: Subscription;

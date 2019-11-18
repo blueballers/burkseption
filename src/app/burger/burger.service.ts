@@ -21,7 +21,7 @@ export class BurgerService {
 		this.initialFilter
 	);
 
-	filteredBurgers$ = combineLatest(this.currentFilter$, this.burgers$).pipe(
+	filteredBurgers$ = combineLatest([this.currentFilter$, this.burgers$]).pipe(
 		map(([filter, burgers]) =>
 			burgers.filter(burger => burger.name.includes(filter.name))
 		)
