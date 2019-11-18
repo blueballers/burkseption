@@ -1,14 +1,23 @@
 @import "../../assets/variables.scss";
 
-app-burx-list {
+.app-burx-list {
 	display: block;
 	padding: $padding;
 
 	.example-full-width {
 		width: 100%;
 	}
-}
 
-burx-burx-card {
-	padding: $padding;
+	.burger-list {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
+	}
+
+	burx-burx-card {
+		padding: $padding;
+		max-width: 300px;
+	}
+	
 }

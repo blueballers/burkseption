@@ -1,12 +1,10 @@
 <form class="example-full-width" [formGroup]="searchFormGroup">
 	<mat-form-field class="example-full-width">
-		<input
+		<input formControlName="searchControl"
 			matInput
-			formControlName="searchControl"
-			placeholder="Find by name"
-		/>
+			placeholder="Find by name"/>
 	</mat-form-field>
 </form>
-<ng-container *ngFor="let burger of burgers$ | async">
-	<burx-burx-card [burger]="burger"></burx-burx-card>
-</ng-container>
+<div class="burger-list">
+	<burx-burx-card *ngFor="let burger of burgers$ | async" [burger]="burger"></burx-burx-card>
+</div>

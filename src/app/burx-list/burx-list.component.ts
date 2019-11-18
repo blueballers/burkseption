@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy } from "@angular/core";
+import {
+	Component,
+	OnInit,
+	ViewEncapsulation,
+	OnDestroy,
+	HostBinding
+} from "@angular/core";
 import { BurgerService } from "../burger/burger.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Subscription } from "rxjs";
@@ -10,25 +16,25 @@ import { Subscription } from "rxjs";
 	encapsulation: ViewEncapsulation.None
 })
 export class BurxListComponent implements OnInit, OnDestroy {
-	burgers$ = this.burgerService.filteredBurgers$;
+	@HostBinding("class.app-burx-list") hostClass = true;
 
+	burgers$ = this.burgerService.filteredBurgers$;
 	searchFormGroup = new FormGroup({
 		searchControl: new FormControl("")
 	});
-	data$$: Subscription;
+	search$$: Subscription;
 
 	constructor(private burgerService: BurgerService) {}
 
 	ngOnInit() {
-		this.data$$ = this.searchFormGroup.controls.searchControl.valueChanges.subscribe(
-			searchValue =>
-				this.burgerService.filterBurgers({
-					name: searchValue
-				})
+		this.search$$ = this.searchFormGroup.controls.searchControl.valueChanges.subscribe(
+			searchValue => this.burgerService.filterBurgers({
+				name: searchValue
+			})
 		);
 	}
 
 	ngOnDestroy() {
-		this.data$$.unsubscribe();
+		this.search$$.unsubscribe();
 	}
 }
