@@ -1,0 +1,26 @@
+<h2>Login</h2>
+<form [formGroup]="formGroup" (ngSubmit)="login()" class="login-dialog-form">
+	<div class="login-dialog-form-fields">
+		<mat-form-field class="form-element">
+			<input type="email" matInput placeholder="Emailaddress" formControlName="email">
+			<mat-error *ngIf="!formGroup.controls['email'].valid && formGroup.controls['email'].touched">
+				email not valid
+			</mat-error>
+		</mat-form-field>
+		<mat-form-field class="form-element">
+			<input type="password" matInput placeholder="Password" formControlName="password">
+			<mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>
+			<mat-error *ngIf="!formGroup.controls['password'].valid && formGroup.controls['password'].touched">
+				pw reqired
+			</mat-error>
+		</mat-form-field>
+	</div>
+
+	<button mat-raised-button color="primary" type="submit" [disabled]="!formGroup.valid">Login</button>
+</form>
+<div class="login-dialog-error">{{ logInError }}</div>
+
+<div class="login-dialog-register-cancel-buttons">
+	<button mat-raised-button color="primary" (click)="register()" [disabled]="!formGroup.valid">Register</button>
+	<button mat-raised-button color="secondary" (click)="cancel()">Cancel</button>
+</div>

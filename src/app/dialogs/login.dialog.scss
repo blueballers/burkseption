@@ -1,0 +1,24 @@
+.login-dialog {
+	h2 {
+		margin-top: 0;
+	}
+
+	.mat-form-field {
+		width: 100%;
+	}
+
+	&-form-fields {
+		margin-bottom: 16px;
+	}
+
+	&-error {
+		padding: 8px;
+		color: red;
+		text-align: center;
+	}
+
+	&-register-cancel-buttons {
+		margin: 4px;
+		text-align: right;
+	}
+}

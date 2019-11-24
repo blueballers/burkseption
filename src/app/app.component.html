@@ -2,7 +2,16 @@
 	<button mat-icon-button (click)="openSideNavigation()">
 		<mat-icon>menu</mat-icon>
 	</button>
-	<h1 routerLink="/">Burkseption</h1>
+	<h1 routerLink="/">Burx</h1>
+
+	<button *ngIf="!isAuthenticated" mat-raised-button (click)="openLoginDialog()">
+		Login
+		<mat-icon *ngIf="isAuthenticated === undefined">
+			<mat-spinner color="accent" diameter="20">
+			</mat-spinner>
+		</mat-icon>
+	</button>
+	<button *ngIf="isAuthenticated" mat-raised-button (click)="logOut()">Logout</button>
 </mat-toolbar>
 
 <side-navigation-container [toggle$]="toggleSubject.asObservable()"></side-navigation-container>
